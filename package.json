@@ -1,0 +1,32 @@
+{
+  "name": "cli-action",
+  "version": "4.0.1",
+  "description": "GitHub Action to install the Doppler CLI",
+  "main": "bin/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "rollup --config rollup.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DopplerHQ/cli-action.git"
+  },
+  "keywords": [],
+  "author": "Doppler",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/DopplerHQ/cli-action/issues"
+  },
+  "homepage": "https://github.com/DopplerHQ/cli-action#readme",
+  "dependencies": {
+    "@actions/core": "^3.0.0",
+    "@actions/io": "^3.0.0",
+    "@actions/tool-cache": "^4.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@types/node": "^24.0.0",
+    "rollup": "^4.59.0"
+  }
+}

@@ -1,17 +1,37 @@
-# dopplerhq/cli-action
+# Install Doppler CLI action
 
-Install the Doppler CLI into your PATH
+The [Doppler CLI](https://github.com/DopplerHQ/cli) is the official tool for interacting with your Enclave secrets and configuration. This action installs the latest Doppler CLI into your PATH.
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/dopplerhq/cli-action](https://github.com/dopplerhq/cli-action).
+## Example usage
 
-## Versions
+Include this Action as a step in your workflow:
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1 | [`v1`](https://github.com/chainguard-actions/dopplerhq-cli-action/tree/v1) | [`0636e30`](https://github.com/dopplerhq/cli-action/commit/0636e30522ac1d88b3de47b7d58b734edf0f153f) |
-| v2 | [`v2`](https://github.com/chainguard-actions/dopplerhq-cli-action/tree/v2) | [`41106db`](https://github.com/dopplerhq/cli-action/commit/41106dbef2e821dcf2250b0c936a616a438a278a) |
-| v3 | [`v3`](https://github.com/chainguard-actions/dopplerhq-cli-action/tree/v3) | [`014df23`](https://github.com/dopplerhq/cli-action/commit/014df23b1329b615816a38eb5f473bb9000700b1) |
-| v4.0.1 | [`v4.0.1`](https://github.com/chainguard-actions/dopplerhq-cli-action/tree/v4.0.1) | [`4819d80`](https://github.com/dopplerhq/cli-action/commit/4819d808ab99e5cde19a0637a16536a4038fad73) |
+```
+uses: dopplerhq/cli-action@v4
+```
+
+You can see a live example of this Action [here](https://github.com/DopplerHQ/cli/blob/master/.github/workflows/cli-action.yml).
+
+## Configuration
+
+In most cases, you'll need to provide the CLI with an auth token. You can do so via the `DOPPLER_TOKEN` environment variable. In the below example, the token is retrieved from [GitHub secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+
+```yaml
+name: Example action
+
+on: [push]
+
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install CLI
+        uses: dopplerhq/cli-action@v4
+      - name: Do something with the CLI
+        run: doppler secrets --only-names
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+```
 
 ## Privacy
 
