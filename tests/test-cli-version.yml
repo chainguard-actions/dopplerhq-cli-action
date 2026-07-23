@@ -1,0 +1,20 @@
+name: Test CLI version output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: install
+        uses: .
+      - name: Assert doppler CLI reports a version
+        run: |
+          echo "Running: doppler --version"
+          VERSION_OUTPUT=$(doppler --version 2>&1)
+          echo "Output: $VERSION_OUTPUT"
+          if [ -z "$VERSION_OUTPUT" ]; then
+            echo "FAIL: doppler --version produced no output"
+            exit 1
+          fi
+          echo "PASS: doppler --version returned: $VERSION_OUTPUT"

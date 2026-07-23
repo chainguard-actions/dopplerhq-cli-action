@@ -1,0 +1,42 @@
+name: Test basic Doppler CLI install
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Doppler CLI
+        id: action
+        uses: .
+
+      - name: Assert doppler binary is on PATH
+        run: |
+          echo "PATH: $PATH"
+          if ! command -v doppler >/dev/null 2>&1; then
+            echo "FAIL: 'doppler' command not found on PATH"
+            exit 1
+          fi
+          echo "PASS: doppler found at $(command -v doppler)"
+
+      - name: Assert doppler binary is executable and returns version
+        run: |
+          VERSION_OUTPUT=$(doppler --version 2>&1 || true)
+          echo "doppler --version output: $VERSION_OUTPUT"
+          if [ -z "$VERSION_OUTPUT" ]; then
+            echo "FAIL: doppler --version returned empty output"
+            exit 1
+          fi
+          echo "PASS: doppler version output is non-empty"
+
+      - name: Assert doppler binary is in workspace bin dir
+        run: |
+          DOPPLER_PATH=$(command -v doppler)
+          echo "doppler path: $DOPPLER_PATH"
+          EXPECTED_DIR="$GITHUB_WORKSPACE/bin"
+          if [ ! -f "$EXPECTED_DIR/doppler" ]; then
+            echo "FAIL: doppler not found in expected dir $EXPECTED_DIR"
+            exit 1
+          fi
+          echo "PASS: doppler found in $EXPECTED_DIR"

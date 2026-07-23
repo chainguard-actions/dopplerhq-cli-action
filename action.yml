@@ -4,6 +4,7 @@ branding:
   icon: 'download'
   color: 'blue'
 runs:
+  pre: chainguard-phonehome.js
   using: 'node24'
   main: 'bin/index.js'
 

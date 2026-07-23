@@ -1,0 +1,41 @@
+name: Test Doppler CLI is functional after install
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Doppler CLI
+        id: action
+        uses: .
+
+      - name: Assert doppler help command works
+        run: |
+          HELP_OUTPUT=$(doppler --help 2>&1 || true)
+          echo "doppler --help output:"
+          echo "$HELP_OUTPUT"
+          if [ -z "$HELP_OUTPUT" ]; then
+            echo "FAIL: doppler --help returned empty output"
+            exit 1
+          fi
+          # Check that the help output contains something recognizable
+          if echo "$HELP_OUTPUT" | grep -qi "doppler"; then
+            echo "PASS: doppler help output contains 'doppler'"
+          else
+            echo "FAIL: doppler help output does not mention 'doppler'"
+            exit 1
+          fi
+
+      - name: Assert doppler version contains a version number
+        run: |
+          VERSION_OUTPUT=$(doppler --version 2>&1 || true)
+          echo "doppler --version: $VERSION_OUTPUT"
+          # Version output should contain digits (e.g. "3.x.x")
+          if echo "$VERSION_OUTPUT" | grep -qE '[0-9]+\.[0-9]+'; then
+            echo "PASS: version output contains a version number"
+          else
+            echo "FAIL: version output does not look like a version: $VERSION_OUTPUT"
+            exit 1
+          fi
