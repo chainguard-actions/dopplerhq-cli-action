@@ -1,0 +1,37 @@
+name: Test Doppler CLI is executable after installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Doppler CLI
+        id: install
+        uses: .
+
+      - name: Assert doppler binary is executable
+        run: |
+          DOPPLER_PATH=$(command -v doppler 2>/dev/null)
+          echo "doppler path: $DOPPLER_PATH"
+          if [ -z "$DOPPLER_PATH" ]; then
+            echo "FAIL: doppler not found in PATH"
+            exit 1
+          fi
+          if [ ! -x "$DOPPLER_PATH" ]; then
+            echo "FAIL: doppler binary at $DOPPLER_PATH is not executable"
+            exit 1
+          fi
+          echo "PASS: doppler binary is executable at $DOPPLER_PATH"
+
+      - name: Assert doppler help output is non-empty
+        run: |
+          echo "Running: doppler help"
+          HELP_OUTPUT=$(doppler help 2>&1 || true)
+          echo "Output: $HELP_OUTPUT"
+          if [ -z "$HELP_OUTPUT" ]; then
+            echo "FAIL: doppler help produced no output"
+            exit 1
+          fi
+          echo "PASS: doppler help returned output"

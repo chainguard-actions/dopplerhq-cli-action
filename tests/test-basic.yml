@@ -1,0 +1,32 @@
+name: Test basic Doppler CLI installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Doppler CLI
+        id: install
+        uses: .
+
+      - name: Assert doppler binary is in PATH
+        run: |
+          echo "Checking for doppler binary in PATH..."
+          if ! command -v doppler >/dev/null 2>&1; then
+            echo "FAIL: 'doppler' command not found in PATH"
+            exit 1
+          fi
+          echo "PASS: doppler found at $(command -v doppler)"
+
+      - name: Assert doppler version command works
+        run: |
+          echo "Running: doppler --version"
+          VERSION_OUTPUT=$(doppler --version 2>&1)
+          echo "Output: $VERSION_OUTPUT"
+          if [ -z "$VERSION_OUTPUT" ]; then
+            echo "FAIL: doppler --version produced no output"
+            exit 1
+          fi
+          echo "PASS: doppler --version returned: $VERSION_OUTPUT"
