@@ -1,0 +1,47 @@
+name: Test Doppler CLI is executable after install
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Doppler CLI
+        id: install
+        uses: .
+
+      - name: Assert doppler binary exists in workspace bin dir
+        run: |
+          BIN_PATH="$GITHUB_WORKSPACE/bin/doppler"
+          echo "Checking for binary at: $BIN_PATH"
+          if [ ! -f "$BIN_PATH" ]; then
+            echo "FAIL: doppler binary not found at $BIN_PATH"
+            exit 1
+          fi
+          echo "PASS: doppler binary found at $BIN_PATH"
+
+      - name: Assert doppler binary is executable
+        run: |
+          BIN_PATH="$GITHUB_WORKSPACE/bin/doppler"
+          if [ ! -x "$BIN_PATH" ]; then
+            echo "FAIL: doppler binary at $BIN_PATH is not executable"
+            exit 1
+          fi
+          echo "PASS: doppler binary is executable"
+
+      - name: Assert doppler help command works
+        run: |
+          echo "Running: doppler --help"
+          HELP_OUTPUT=$(doppler --help 2>&1 || true)
+          echo "help output: $HELP_OUTPUT"
+          if [ -z "$HELP_OUTPUT" ]; then
+            echo "FAIL: doppler --help produced no output"
+            exit 1
+          fi
+          # Verify it looks like Doppler CLI help
+          if ! echo "$HELP_OUTPUT" | grep -qi "doppler"; then
+            echo "FAIL: help output does not mention 'doppler'"
+            exit 1
+          fi
+          echo "PASS: doppler --help works correctly"
