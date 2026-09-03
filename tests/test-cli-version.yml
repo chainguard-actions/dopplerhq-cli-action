@@ -1,0 +1,42 @@
+name: Test Doppler CLI version output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: install
+        name: Install Doppler CLI
+        uses: .
+
+      - name: Assert doppler binary exists in workspace bin
+        run: |
+          DOPPLER_PATH="$GITHUB_WORKSPACE/bin/doppler"
+          echo "Checking for doppler at: $DOPPLER_PATH"
+          if [ ! -f "$DOPPLER_PATH" ]; then
+            echo "FAIL: doppler binary not found at $DOPPLER_PATH"
+            exit 1
+          fi
+          echo "PASS: doppler binary found at $DOPPLER_PATH"
+
+      - name: Assert doppler binary is executable
+        run: |
+          DOPPLER_PATH="$GITHUB_WORKSPACE/bin/doppler"
+          if [ ! -x "$DOPPLER_PATH" ]; then
+            echo "FAIL: doppler binary at $DOPPLER_PATH is not executable"
+            exit 1
+          fi
+          echo "PASS: doppler binary is executable"
+
+      - name: Assert doppler version output contains version number
+        run: |
+          VERSION_OUTPUT=$(doppler --version 2>&1)
+          echo "version output: $VERSION_OUTPUT"
+          # Doppler CLI version output typically looks like "3.x.x" or contains digits
+          if ! echo "$VERSION_OUTPUT" | grep -qE '[0-9]+\.[0-9]+'; then
+            echo "FAIL: version output does not contain a version number pattern"
+            exit 1
+          fi
+          echo "PASS: version output contains a version number"
