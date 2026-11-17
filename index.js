@@ -517,7 +517,7 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
-    var fs = __importStar(require("fs"));
+    var fs2 = __importStar(require("fs"));
     var os = __importStar(require("os"));
     var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
     var utils_1 = require_utils();
@@ -526,10 +526,10 @@ var require_file_command = __commonJS({
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
       }
-      if (!fs.existsSync(filePath)) {
+      if (!fs2.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs2.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -18879,12 +18879,12 @@ var require_io_util = __commonJS({
     var _a;
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getCmdPath = exports2.tryGetExecutablePath = exports2.isRooted = exports2.isDirectory = exports2.exists = exports2.READONLY = exports2.UV_FS_O_EXLOCK = exports2.IS_WINDOWS = exports2.unlink = exports2.symlink = exports2.stat = exports2.rmdir = exports2.rm = exports2.rename = exports2.readlink = exports2.readdir = exports2.open = exports2.mkdir = exports2.lstat = exports2.copyFile = exports2.chmod = void 0;
-    var fs = __importStar(require("fs"));
+    var fs2 = __importStar(require("fs"));
     var path = __importStar(require("path"));
-    _a = fs.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.open = _a.open, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rm = _a.rm, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
+    _a = fs2.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.open = _a.open, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rm = _a.rm, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
     exports2.IS_WINDOWS = process.platform === "win32";
     exports2.UV_FS_O_EXLOCK = 268435456;
-    exports2.READONLY = fs.constants.O_RDONLY;
+    exports2.READONLY = fs2.constants.O_RDONLY;
     function exists(fsPath) {
       return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -20459,7 +20459,7 @@ var require_manifest = __commonJS({
     var core_1 = require_core();
     var os = require("os");
     var cp = require("child_process");
-    var fs = require("fs");
+    var fs2 = require("fs");
     function _findMatch(versionSpec, stable, candidates, archFilter) {
       return __awaiter(this, void 0, void 0, function* () {
         const platFilter = os.platform();
@@ -20523,10 +20523,10 @@ var require_manifest = __commonJS({
       const lsbReleaseFile = "/etc/lsb-release";
       const osReleaseFile = "/etc/os-release";
       let contents = "";
-      if (fs.existsSync(lsbReleaseFile)) {
-        contents = fs.readFileSync(lsbReleaseFile).toString();
-      } else if (fs.existsSync(osReleaseFile)) {
-        contents = fs.readFileSync(osReleaseFile).toString();
+      if (fs2.existsSync(lsbReleaseFile)) {
+        contents = fs2.readFileSync(lsbReleaseFile).toString();
+      } else if (fs2.existsSync(osReleaseFile)) {
+        contents = fs2.readFileSync(osReleaseFile).toString();
       }
       return contents;
     }
@@ -21712,7 +21712,7 @@ var require_exec = __commonJS({
     function getExecOutput(commandLine, args, options) {
       var _a, _b;
       return __awaiter(this, void 0, void 0, function* () {
-        let stdout2 = "";
+        let stdout = "";
         let stderr = "";
         const stdoutDecoder = new string_decoder_1.StringDecoder("utf8");
         const stderrDecoder = new string_decoder_1.StringDecoder("utf8");
@@ -21725,18 +21725,18 @@ var require_exec = __commonJS({
           }
         };
         const stdOutListener = (data) => {
-          stdout2 += stdoutDecoder.write(data);
+          stdout += stdoutDecoder.write(data);
           if (originalStdoutListener) {
             originalStdoutListener(data);
           }
         };
         const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
         const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
-        stdout2 += stdoutDecoder.end();
+        stdout += stdoutDecoder.end();
         stderr += stderrDecoder.end();
         return {
           exitCode,
-          stdout: stdout2,
+          stdout,
           stderr
         };
       });
@@ -21908,7 +21908,7 @@ var require_tool_cache = __commonJS({
     exports2.evaluateVersions = exports2.isExplicitVersion = exports2.findFromManifest = exports2.getManifestFromRepo = exports2.findAllVersions = exports2.find = exports2.cacheFile = exports2.cacheDir = exports2.extractZip = exports2.extractXar = exports2.extractTar = exports2.extract7z = exports2.downloadTool = exports2.HTTPError = void 0;
     var core2 = __importStar(require_core());
     var io2 = __importStar(require_io());
-    var fs = __importStar(require("fs"));
+    var fs2 = __importStar(require("fs"));
     var mm = __importStar(require_manifest());
     var os = __importStar(require("os"));
     var path = __importStar(require("path"));
@@ -21956,7 +21956,7 @@ var require_tool_cache = __commonJS({
     exports2.downloadTool = downloadTool;
     function downloadToolAttempt(url, dest, auth, headers) {
       return __awaiter(this, void 0, void 0, function* () {
-        if (fs.existsSync(dest)) {
+        if (fs2.existsSync(dest)) {
           throw new Error(`Destination file path ${dest} already exists`);
         }
         const http = new httpm.HttpClient(userAgent, [], {
@@ -21980,7 +21980,7 @@ var require_tool_cache = __commonJS({
         const readStream = responseMessageFactory();
         let succeeded = false;
         try {
-          yield pipeline(readStream, fs.createWriteStream(dest));
+          yield pipeline(readStream, fs2.createWriteStream(dest));
           core2.debug("download complete");
           succeeded = true;
           return dest;
@@ -22192,11 +22192,11 @@ var require_tool_cache = __commonJS({
         arch = arch || os.arch();
         core2.debug(`Caching tool ${tool} ${version2} ${arch}`);
         core2.debug(`source dir: ${sourceDir}`);
-        if (!fs.statSync(sourceDir).isDirectory()) {
+        if (!fs2.statSync(sourceDir).isDirectory()) {
           throw new Error("sourceDir is not a directory");
         }
         const destPath = yield _createToolPath(tool, version2, arch);
-        for (const itemName of fs.readdirSync(sourceDir)) {
+        for (const itemName of fs2.readdirSync(sourceDir)) {
           const s = path.join(sourceDir, itemName);
           yield io2.cp(s, destPath, { recursive: true });
         }
@@ -22211,7 +22211,7 @@ var require_tool_cache = __commonJS({
         arch = arch || os.arch();
         core2.debug(`Caching tool ${tool} ${version2} ${arch}`);
         core2.debug(`source file: ${sourceFile}`);
-        if (!fs.statSync(sourceFile).isFile()) {
+        if (!fs2.statSync(sourceFile).isFile()) {
           throw new Error("sourceFile is not a file");
         }
         const destFolder = yield _createToolPath(tool, version2, arch);
@@ -22241,7 +22241,7 @@ var require_tool_cache = __commonJS({
         versionSpec = semver.clean(versionSpec) || "";
         const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
         core2.debug(`checking cache: ${cachePath}`);
-        if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
+        if (fs2.existsSync(cachePath) && fs2.existsSync(`${cachePath}.complete`)) {
           core2.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
           toolPath = cachePath;
         } else {
@@ -22255,12 +22255,12 @@ var require_tool_cache = __commonJS({
       const versions = [];
       arch = arch || os.arch();
       const toolPath = path.join(_getCacheDirectory(), toolName);
-      if (fs.existsSync(toolPath)) {
-        const children = fs.readdirSync(toolPath);
+      if (fs2.existsSync(toolPath)) {
+        const children = fs2.readdirSync(toolPath);
         for (const child of children) {
           if (isExplicitVersion(child)) {
             const fullPath = path.join(toolPath, child, arch || "");
-            if (fs.existsSync(fullPath) && fs.existsSync(`${fullPath}.complete`)) {
+            if (fs2.existsSync(fullPath) && fs2.existsSync(`${fullPath}.complete`)) {
               versions.push(child);
             }
           }
@@ -22334,7 +22334,7 @@ var require_tool_cache = __commonJS({
     function _completeToolPath(tool, version2, arch) {
       const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version2) || version2, arch || "");
       const markerPath = `${folderPath}.complete`;
-      fs.writeFileSync(markerPath, "");
+      fs2.writeFileSync(markerPath, "");
       core2.debug("finished caching tool");
     }
     function isExplicitVersion(versionSpec) {
@@ -22394,7 +22394,8 @@ var require_tool_cache = __commonJS({
 var core = require_core();
 var tc = require_tool_cache();
 var io = require_io();
-var { execSync } = require("child_process");
+var { execFileSync } = require("child_process");
+var fs = require("fs");
 var workspace = process.env.GITHUB_WORKSPACE;
 var binDir = `${workspace}/bin`;
 run().catch((error) => {
@@ -22426,10 +22427,9 @@ async function installZip(path, url) {
 async function executeInstallSh(installPath) {
   const url = "https://cli.doppler.com/install.sh";
   const downloadPath = await tc.downloadTool(url);
-  execSync(`chmod +x ${downloadPath}`);
+  fs.chmodSync(downloadPath, 493);
   await io.mkdirP(installPath);
-  const installCommand = `${downloadPath} --debug --no-package-manager --install-path ${installPath}`;
-  stdout = execSync(installCommand, { timeout: 3e4 });
+  const stdout = execFileSync(downloadPath, ["--debug", "--no-package-manager", "--install-path", installPath], { timeout: 3e4 });
   console.log(Buffer.from(stdout).toString("utf-8"));
   core.addPath(installPath);
 }
